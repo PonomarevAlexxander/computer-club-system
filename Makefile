@@ -2,7 +2,7 @@
 build:
 	go build -o ./bin/computer-club ./cmd/main.go
 
-TEST_DIR := examples
+TEST_DIR:=examples
 .PHONY: test
 test: build
 	@for f in $(shell ls ./${TEST_DIR}); \
@@ -15,7 +15,7 @@ unit-test:
 	go test ./...
 
 
-version=
+version:=
 .PHONY: docker-build
 docker-build:
 	docker build -t computer-club-system .
