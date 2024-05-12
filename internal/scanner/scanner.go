@@ -19,7 +19,6 @@ func NewScanner(r io.Reader) *Scanner {
 	}
 }
 
-// ReadLine reads line value from reader
 func (scanner *Scanner) ReadLine() (string, error) {
 	if !scanner.s.Scan() {
 		err := scanner.s.Err()

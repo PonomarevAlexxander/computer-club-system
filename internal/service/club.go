@@ -73,9 +73,10 @@ func (c *ComputerClubService) CloseClub() []*command.Command {
 	outCommands := make([]*command.Command, 0)
 
 	for client, table := range c.clientToTable {
-		duration := c.closingTime.Sub(c.tableToTime[table])
 
+		// if client took place
 		if table > 0 {
+			duration := c.closingTime.Sub(c.tableToTime[table])
 			c.tableStatistics[table-1].AddIncomeUpperBound(duration, c.hourPrice)
 			c.tableStatistics[table-1].AddTime(duration)
 		}
