@@ -109,7 +109,7 @@ func (e *ClientTookTableHandler) Process(cmd *command.Command, clubStateDto *Clu
 	}
 
 	tempTableId, err := strconv.ParseUint(cmd.Params[1], 10, 0)
-	if err != nil || tempTableId > uint64(clubStateDto.totalTables) {
+	if err != nil || tempTableId > uint64(clubStateDto.totalTables) || tempTableId < 1 {
 		return nil, errlib.ErrInputFormat
 	}
 	tableId := uint(tempTableId)

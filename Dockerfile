@@ -14,5 +14,4 @@ WORKDIR /
 
 COPY --from=build-stage /computer-club-system /computer-club-system
 
-# need to mount volume into /configs/backend/config.yaml
 ENTRYPOINT ["/computer-club-system"]

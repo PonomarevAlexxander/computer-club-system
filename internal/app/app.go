@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/PonomarevAlexxander/computer-club-system/internal/command"
 	"github.com/PonomarevAlexxander/computer-club-system/internal/config"
@@ -29,7 +30,12 @@ func NewComputerClub(in scanner.IScanner, out io.Writer, service service.IComput
 
 func (club *ComputerClub) Start() {
 	fmt.Fprintln(club.out, club.service.GetOpeningHours().Format(config.TimeFormat))
-	var err error = nil
+
+	var (
+		err      error     = nil
+		prevTime time.Time = time.Date(0, 0, 0, 0, 0, 0, 0, time.UTC)
+	)
+
 	for err != io.EOF {
 		line, err := club.scanner.ReadLine()
 		if err == io.EOF {
@@ -45,6 +51,10 @@ func (club *ComputerClub) Start() {
 			club.handleError(err, line)
 			return
 		}
+		if cmd.Time.Before(prevTime) {
+			util.HandleInputError(club.out, line)
+			return
+		}
 
 		generatedCmd, err := club.service.Process(cmd)
 		if err != nil {
@@ -56,6 +66,8 @@ func (club *ComputerClub) Start() {
 		if generatedCmd != nil {
 			fmt.Fprintln(club.out, generatedCmd)
 		}
+
+		prevTime = cmd.Time
 	}
 
 	for _, cmd := range club.service.CloseClub() {
